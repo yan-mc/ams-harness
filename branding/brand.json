@@ -1,0 +1,79 @@
+{
+  "schema": "ams-brand/1",
+  "updatedAt": "2026-10-19T21:30:00+08:00",
+  "status": "skeleton-placeholder",
+  "product": {
+    "name": "AMS Studio",
+    "nameZh": "AMS Studio",
+    "codename": "AMS",
+    "description": "AI 音乐工作站（基于 DeepSeek Harness 内核）",
+    "publisher": "yan-mc"
+  },
+  "windows": {
+    "appId": "com.yanmc.ams",
+    "protocol": "ams",
+    "protocolLegacy": "dsh",
+    "installer": "nsis-per-user",
+    "portableZip": true,
+    "executableName": "AMS Kernel.exe",
+    "artifactPrefix": "AMS-Kernel"
+  },
+  "signing": {
+    "primary": "azure-trusted-signing",
+    "fallback": "ev-certificate",
+    "timestamp": "rfc3161",
+    "note": "M0 使用未签名内部构建；正式签名在 M1+ 决策落地"
+  },
+  "update": {
+    "provider": "github-releases",
+    "owner": "yan-mc",
+    "repo": "ams-release",
+    "channels": [
+      "stable",
+      "beta",
+      "dev"
+    ],
+    "policy": "prompt-only",
+    "autoInstall": false,
+    "builtinElectronUpdater": false,
+    "mirrors": []
+  },
+  "kernel": {
+    "profileName": "music",
+    "dshHome": "%AMS_HOME%",
+    "productPatch": "patches/ams/product.patch.yml",
+    "trim": {
+      "office": false,
+      "libreoffice": false,
+      "pythonRuntime": false,
+      "sherpaOnnx": false,
+      "documentpreview": true,
+      "pluginMarket": false,
+      "experimental": false,
+      "bashPwshTools": false
+    },
+    "privacy": {
+      "sessionLogDeepseek": false,
+      "sessionTelemetryOtel": false,
+      "productAnalytics": false,
+      "deepseekAccount": false,
+      "builtinUpdater": false
+    }
+  },
+  "assets": {
+    "iconPng": "branding/assets/icon.png",
+    "iconWindowsIco": "branding/assets/icon-windows.ico",
+    "trayIco": "branding/assets/tray-windows.ico",
+    "installerSidebarBmp": "branding/assets/installer-sidebar.bmp",
+    "status": "placeholder-not-added"
+  },
+  "brandGuidelines": {
+    "upstreamTrademark": "DeepSeek Harness 为 DeepSeek 注册商标；不得用作产品名",
+    "allowedDescription": "基于 DeepSeek Harness（MIT）构建"
+  },
+  "notes": [
+    "字段对齐 00 总体设计与约定 v1.2 第 16.2 节（产品名/appId/协议/签名/更新源/安装器）",
+    "M0.1 不修改上游源码；后续在 apps/desktop 与构建脚本中消费本文件（M1）",
+    "图标资产待设计提供后放入 branding/assets/"
+  ]
+}

@@ -1,0 +1,130 @@
+# AMS 内核产品层 patch（DSH loader patch / --patch overlay）
+# 状态：M0.1 骨架（未生效；M1 接入内核 resources/ams/product.patch.yml）
+# 规则：本文件是 YAML 数组；按 id 定位条目，替换整个 config 或 insert；disabled: true 卸载行。
+# 依据：06_方案设计/02_主体/主体详细方案.md §5.3/§5.4；00 总体设计与约定 v1.2 §16.1(7)/§16.2。
+# 注意：electron-updater / 强制更新策略 / appId / productName 属构建层，不在此文件（见 trim.manifest.json）。
+
+# ---- 1) 遥测 / 会话上传 / 产品埋点：全部关闭（P0） ----
+- id: session-log-deepseek
+  disabled: true
+- id: session-telemetry-otel
+  disabled: true
+- id: product-analytics
+  disabled: true
+- id: desktop-product-telemetry
+  disabled: true
+
+# ---- 2) DeepSeek 账号体系：不启用，纯 BYOK（P0） ----
+- id: deepseek-account
+  disabled: true
+- id: deepseek-account-platform
+  disabled: true
+- id: llm-deepseek-account
+  disabled: true
+- id: account-controller
+  disabled: true
+- id: ui-settings-account
+  disabled: true
+
+# ---- 3) 任意命令执行 / 终端：默认关闭（P0，降 C 端风险） ----
+- id: tool-bash
+  disabled: true
+- id: tool-bash-persistent
+  disabled: true
+- id: bash-sandbox
+  disabled: true
+- id: tool-pwsh
+  disabled: true
+- id: tool-pwsh-persistent
+  disabled: true
+- id: pwsh-sandbox
+  disabled: true
+- id: terminal-controller
+  disabled: true
+- id: ui-sidebar-terminal
+  disabled: true
+
+# ---- 4) DSH 插件管理器（稳定模式关闭；开发模式再开） ----
+# 开发模式（AMS_DEV=1）可通过独立 overlay 覆盖为 false，见 patches/README.md
+- id: tool-plugin-manager
+  disabled: true
+- id: plugin-manager
+  disabled: true
+- id: ui-plugin-manager
+  disabled: true
+
+# ---- 5) 插件市场（无官方市场；更新走启动器/ams-release）（P0） ----
+- id: plugin-market
+  disabled: true
+- id: plugin-market-index
+  disabled: true
+- id: ui-plugin-market
+  disabled: true
+
+# ---- 6) Office / 工作区依赖（与音乐无关；P1 包级移除） ----
+- id: office-to-pdf
+  disabled: true
+- id: skill-office
+  disabled: true
+- id: tool-workspace-dependencies
+  disabled: true
+# 注：ui-sidebar-documentpreview 保留（00 v1.2 §16.2(4)：P1 用于用户手册/PDF/HTML 预览）
+
+# ---- 7) 语音输入 / 实时转写（不用；TTS 走自有服务）（P0 关行，P1 移除 sherpa） ----
+- id: experimental-speech-to-text
+  disabled: true
+- id: experimental-speech-to-text-sensevoice
+  disabled: true
+- id: experimental-api-speech-to-text
+  disabled: true
+- id: experimental-voice-input-bundle
+  disabled: true
+- id: experimental-client-ui-voice-input
+  disabled: true
+
+# ---- 8) 实验性功能（减面/减风险；以实际 dump 为准，P1 包级移除） ----
+- id: experimental-inspector
+  disabled: true
+- id: experimental-inspector-profile
+  disabled: true
+- id: experimental-session-inspector
+  disabled: true
+- id: experimental-cot-translation-bundle
+  disabled: true
+- id: experimental-client-ui-cot-translation
+  disabled: true
+- id: experimental-translator
+  disabled: true
+- id: experimental-agent-team-profile
+  disabled: true
+- id: experimental-ralph-bundle
+  disabled: true
+- id: experimental-session-search
+  disabled: true
+- id: experimental-session-titles-bundle
+  disabled: true
+- id: experimental-auto-review
+  disabled: true
+- id: experimental-tool-worktree
+  disabled: true
+- id: experimental-worktree
+  disabled: true
+- id: experimental-badge-skill-bundle
+  disabled: true
+- id: experimental-terminal-bundle
+  disabled: true
+- id: experimental-plugin-market-bundle
+  disabled: true
+
+# ---- 9) 默认值（M1 补；示例，暂注释） ----
+# - id: agent-default-model
+#   config:
+#     provider: deepseek-official
+#     model: deepseek-flash
+# - id: tools
+#   config:
+#     mode: native
+# - id: skill-filesystem
+#   config:
+#     customSkillDirs:
+#       - !!js process.env.AMS_SKILLS_DIR ?? ''

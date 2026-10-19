@@ -1,0 +1,220 @@
+{
+  "schema": "ams-kernel/trim/1",
+  "updatedAt": "2026-10-19T21:30:00+08:00",
+  "status": "skeleton-not-applied",
+  "baseline": {
+    "upstreamTag": "dsh-v0.2.1-rc.2",
+    "upstreamCommit": "687f282e8625c6b8d11ff58211a90524be2e4317",
+    "dshVersion": "0.2.1-rc.2"
+  },
+  "decisionsRef": [
+    "00 总体设计与约定 v1.2 §16.1(7) 内核隐私/体积",
+    "00 总体设计与约定 v1.2 §16.2(4) documentpreview 保留",
+    "06_方案设计/02_主体/主体详细方案.md §5.3 裁剪清单"
+  ],
+  "rowDisables": [
+    {
+      "group": "telemetry",
+      "phase": "P0",
+      "ids": [
+        "session-log-deepseek",
+        "session-telemetry-otel",
+        "product-analytics",
+        "desktop-product-telemetry"
+      ],
+      "reason": "默认零遥测/零自动上传"
+    },
+    {
+      "group": "account",
+      "phase": "P0",
+      "ids": [
+        "deepseek-account",
+        "deepseek-account-platform",
+        "llm-deepseek-account",
+        "account-controller",
+        "ui-settings-account"
+      ],
+      "reason": "纯 BYOK，不引入 DeepSeek 账号体系"
+    },
+    {
+      "group": "shell-tools",
+      "phase": "P0",
+      "ids": [
+        "tool-bash",
+        "tool-bash-persistent",
+        "bash-sandbox",
+        "tool-pwsh",
+        "tool-pwsh-persistent",
+        "pwsh-sandbox",
+        "terminal-controller",
+        "ui-sidebar-terminal"
+      ],
+      "reason": "不向 C 端开放任意命令/终端"
+    },
+    {
+      "group": "plugin-manager",
+      "phase": "P0",
+      "ids": [
+        "tool-plugin-manager",
+        "plugin-manager",
+        "ui-plugin-manager"
+      ],
+      "reason": "稳定模式由启动器管理插件；AMS_DEV=1 再开"
+    },
+    {
+      "group": "market",
+      "phase": "P0",
+      "ids": [
+        "plugin-market",
+        "plugin-market-index",
+        "ui-plugin-market"
+      ],
+      "reason": "无官方市场；更新走 ams-release"
+    },
+    {
+      "group": "office",
+      "phase": "P1",
+      "ids": [
+        "office-to-pdf",
+        "skill-office",
+        "tool-workspace-dependencies"
+      ],
+      "reason": "与音乐无关；配合移除 LibreOffice"
+    },
+    {
+      "group": "voice-input",
+      "phase": "P1",
+      "ids": [
+        "experimental-speech-to-text",
+        "experimental-speech-to-text-sensevoice",
+        "experimental-api-speech-to-text",
+        "experimental-voice-input-bundle",
+        "experimental-client-ui-voice-input"
+      ],
+      "reason": "不用；TTS 走自有服务；可移除 sherpa"
+    },
+    {
+      "group": "experimental",
+      "phase": "P1",
+      "ids": [
+        "experimental-inspector",
+        "experimental-inspector-profile",
+        "experimental-session-inspector",
+        "experimental-cot-translation-bundle",
+        "experimental-client-ui-cot-translation",
+        "experimental-translator",
+        "experimental-agent-team-profile",
+        "experimental-ralph-bundle",
+        "experimental-session-search",
+        "experimental-session-titles-bundle",
+        "experimental-auto-review",
+        "experimental-tool-worktree",
+        "experimental-worktree",
+        "experimental-badge-skill-bundle",
+        "experimental-terminal-bundle",
+        "experimental-plugin-market-bundle"
+      ],
+      "reason": "减面/减风险"
+    }
+  ],
+  "keptOnPurpose": [
+    {
+      "id": "ui-sidebar-documentpreview",
+      "reason": "00 v1.2 §16.2(4)：P1 用于用户手册/PDF/HTML 预览",
+      "sizeMb": 14.73
+    },
+    {
+      "id": "ui-sidebar-browser",
+      "reason": "复杂编辑器 iframe/webview 兜底；体积仅 0.08MB"
+    }
+  ],
+  "packageRemovals": [
+    {
+      "package": "@deepseek-ai/libreoffice-kit-win32-x64",
+      "sizeMb": 190.88,
+      "phase": "P1",
+      "reason": "Office 无关；MPL-2.0 合规面简化",
+      "evidence": "04_DSH架构 报告 §6.3；asar.unpacked 实测 182MB"
+    },
+    {
+      "package": "Python runtime（primary-runtime/dependencies/python）",
+      "sizeMb": 146.2,
+      "phase": "P1",
+      "reason": "内核不需要 Python；服务各自独立运行时",
+      "evidence": "本机实测 D:/dsh/resources/runtime"
+    },
+    {
+      "package": "@deepseek-ai/dsh-experimental-inspector",
+      "sizeMb": 23.46,
+      "phase": "P1",
+      "reason": "实验功能关闭"
+    },
+    {
+      "package": "sherpa-onnx-win-x64",
+      "sizeMb": 22.4,
+      "phase": "P1",
+      "reason": "语音输入移除"
+    },
+    {
+      "package": "@deepseek-ai/dsh-plugin-market(+index)",
+      "sizeMb": 5.63,
+      "phase": "P1",
+      "reason": "无官方市场"
+    },
+    {
+      "package": "@deepseek-ai/dsh-experimental-client-ui-cot-translation",
+      "sizeMb": 5.5,
+      "phase": "P1",
+      "reason": "实验功能关闭"
+    },
+    {
+      "package": "office-skills 资源",
+      "sizeMb": 0.03,
+      "phase": "P1",
+      "reason": "随 Office 移除"
+    }
+  ],
+  "buildChanges": [
+    {
+      "target": "apps/desktop/scripts/electron-builder-config.mjs",
+      "change": "productName=AMS Studio；appId=com.yanmc.ams；artifactName=AMS-Kernel-*；protocols=ams；publish=null（关闭内置 electron-updater）",
+      "phase": "M1"
+    },
+    {
+      "target": "apps/desktop/package.json",
+      "change": "删除 dshMandatoryUpdatePolicy；更新描述/版本策略",
+      "phase": "M1"
+    },
+    {
+      "target": "apps/desktop/src/locale.ts + main.ts",
+      "change": "品牌文案/应用名/菜单（去检查更新）/关于页说明",
+      "phase": "M1"
+    },
+    {
+      "target": "apps/desktop/src/paths.ts + apps/desktop-host/src/index.ts + apps/cli/src/{args,plugin}.ts",
+      "change": "profile desktop -> music；注入 product.patch.yml；reserved profile 调整",
+      "phase": "M1"
+    },
+    {
+      "target": "packages/boot/app-boot/src/profile.ts",
+      "change": "新增 music profile 模板（bundles: dsh-base, dsh-web-app, @ams/music-bundle）",
+      "phase": "M1"
+    },
+    {
+      "target": "apps/desktop/scripts/prepare-dsh.ts、prepare-primary-runtime.ts、runtime-file-policy.ts",
+      "change": "AMS_TRIM_OFFICE/AMS_TRIM_PYTHON 条件裁剪",
+      "phase": "P1"
+    }
+  ],
+  "targets": {
+    "installedMbCurrent": 1043.3,
+    "installedMbTarget": "620-665（documentpreview 保留，较方案 §5.3 的 620-650 上浮约 15MB）",
+    "kernelZipMbTarget": "250-320",
+    "note": "以 M1/M3 实测为准"
+  },
+  "notes": [
+    "M0.1 只登记清单，未改任何上游文件，未执行裁剪",
+    "行 id 需在首次 dump-config 后校验（app-boot 对不存在的 id 仅警告）",
+    "documentpreview 因 00 v1.2 决定保留，故体积目标相应上调；其余与主体详细方案一致"
+  ]
+}

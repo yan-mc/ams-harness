@@ -1,0 +1,35 @@
+{
+  "schema": "ams-kernel/upstream/1",
+  "repo": "https://github.com/deepseek-ai/deepseek-harness",
+  "baselineTag": "dsh-v0.2.1-rc.2",
+  "baselineCommit": "687f282e8625c6b8d11ff58211a90524be2e4317",
+  "baselineCommitDate": "2026-10-17T15:22:43+08:00",
+  "baselineCommitSubject": "Merge pull request #6408 from deepseek-harness/worktree/release-dsh-0.2.1-rc.2",
+  "dshVersion": "0.2.1-rc.2",
+  "packageManager": "pnpm@11.28.5",
+  "nodeEngines": "^22.19.0 || >=24.0.0",
+  "clonedAt": "2026-10-19T21:24:00+08:00",
+  "cloneMode": "shallow: depth=1, single-branch, branch=dsh-v0.2.1-rc.2",
+  "remotes": {
+    "origin": "https://github.com/yan-mc/ams-harness.git (placeholder, repo not created/pushed yet)",
+    "upstream": "https://github.com/deepseek-ai/deepseek-harness.git (push disabled: no_push)"
+  },
+  "installedDesktopBuild": {
+    "version": "0.2.1-rc.2",
+    "buildCommit": "332895e0f7c9d4dbfb29729f5eb367fa263ff986",
+    "note": "本机 D:/dsh 安装包的 dshBuildCommit，与 baselineCommit 不同；源码基线以 tag 为准，若需完全对齐安装包需另行 fetch 该 commit（当前浅克隆无深历史）"
+  },
+  "amsKernelApi": 1,
+  "profileName": "music",
+  "trimFlags": {
+    "office": false,
+    "pythonRuntime": false,
+    "documentpreview": true,
+    "pluginMarket": false,
+    "productAnalytics": false
+  },
+  "notes": [
+    "每次重定上游基线时更新本文件，并记录到 M0/构建记录与 CHANGELOG",
+    "浅克隆不包含深历史：需要与 upstream 合并时先 git fetch upstream 或按需 unshallow"
+  ]
+}
