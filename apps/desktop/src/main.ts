@@ -84,7 +84,8 @@ const rendererConsole = new RendererConsoleTail()
 // userData before any profile or window work; the desktop package otherwise derives both from
 // the upstream product name and would collide with an installed DSH.
 const amsHome = process.env.AMS_HOME
-if (amsHome !== undefined && amsHome.length > 0) {
+const amsKernelMode = amsHome !== undefined && amsHome.length > 0
+if (amsKernelMode) {
   app.setName('AMS Kernel')
   app.setPath('userData', join(amsHome, 'kernel', 'electron-data'))
 }
@@ -1151,6 +1152,7 @@ async function main(): Promise<void> {
   let openingWelcome: Promise<void> | undefined
   const showWelcome = (): Promise<void> => {
     if (quitting) return Promise.resolve()
+    if (amsKernelMode) return enterWorkspace()
     if (welcomeWindow !== undefined && !welcomeWindow.isDestroyed()) {
       if (!welcomeWindow.isVisible()) void track('auth_page_view', {})
       welcomeWindow.show()
@@ -1217,7 +1219,7 @@ async function main(): Promise<void> {
     locale = resolveDesktopStartupLocale(state.localePreference, systemLanguages)
     windowsLanguage = locale.id
     refreshApplicationMenu()
-    if (!enteredWorkspace && needsWelcome({ loggedIn: state.loggedIn, hasApiKey: state.hasApiKey })) {
+    if (!amsKernelMode && !enteredWorkspace && needsWelcome({ loggedIn: state.loggedIn, hasApiKey: state.hasApiKey })) {
       // A later login must retain its own activation policy instead of replaying startup focus.
       raiseAfterUpdate = false
       await showWelcome()
