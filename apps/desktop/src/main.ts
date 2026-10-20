@@ -80,6 +80,15 @@ let backendReady = false
 /** Error-level console output of the primary window, attached to crash reports. */
 const rendererConsole = new RendererConsoleTail()
 
+// AMS launches the kernel with AMS_HOME. Give that instance its own Electron identity and
+// userData before any profile or window work; the desktop package otherwise derives both from
+// the upstream product name and would collide with an installed DSH.
+const amsHome = process.env.AMS_HOME
+if (amsHome !== undefined && amsHome.length > 0) {
+  app.setName('AMS Studio')
+  app.setPath('userData', join(amsHome, 'kernel', 'electron-data'))
+}
+
 // Platform-conventional logs directory (macOS ~/Library/Logs/<name>, otherwise under userData);
 // set before ready so the first fatal report already resolves under it.
 app.setAppLogsPath()
