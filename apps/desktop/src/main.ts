@@ -85,7 +85,7 @@ const rendererConsole = new RendererConsoleTail()
 // the upstream product name and would collide with an installed DSH.
 const amsHome = process.env.AMS_HOME
 if (amsHome !== undefined && amsHome.length > 0) {
-  app.setName('AMS Studio')
+  app.setName('AMS Kernel')
   app.setPath('userData', join(amsHome, 'kernel', 'electron-data'))
 }
 
@@ -941,7 +941,7 @@ async function main(): Promise<void> {
   const applicationIconPath = development ? join(app.getAppPath(), 'resources', 'icon-windows.png')
     : join(process.resourcesPath, 'icon.png')
   app.setAboutPanelOptions({
-    applicationName: 'DeepSeek Harness',
+    applicationName: 'AMS Kernel',
     applicationVersion: app.getVersion(),
     // The release has no separate build number; omit Electron's bundle version.
     version: '',

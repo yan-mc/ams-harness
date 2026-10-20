@@ -15,7 +15,7 @@ const artifacts = desktopArtifactOutput(paths, { unsigned: values.unsigned, skip
 const application = windows ? join(artifacts, 'win-unpacked')
   : join(artifacts, target === 'mac-arm64' ? 'mac-arm64' : 'mac', 'DeepSeek Harness.app', 'Contents')
 const resources = join(application, windows ? 'resources' : 'Resources')
-const executable = windows ? join(application, 'AMS Studio.exe') : join(application, 'MacOS', 'AMS Studio')
+const executable = windows ? join(application, 'AMS Kernel.exe') : join(application, 'MacOS', 'AMS Kernel')
 const descriptor = await verifyDesktopRuntime(paths.dsh, readDesktopRuntime(paths.dsh).release.version,
   resolveDesktopPackageTarget(target))
 if (windows && !values.unsigned) await verifyWindowsCode(application)
