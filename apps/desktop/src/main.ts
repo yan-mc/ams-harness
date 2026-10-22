@@ -3,7 +3,7 @@ import { WINDOWS_TITLEBAR_HEIGHT } from './windows-layout.ts'
 /** Electron shell: desktop project ownership, custom protocol, windows, and lifecycle. */
 
 import { readFile, writeFile } from 'node:fs/promises'
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import {
   app,
@@ -80,15 +80,13 @@ let backendReady = false
 /** Error-level console output of the primary window, attached to crash reports. */
 const rendererConsole = new RendererConsoleTail()
 
-// AMS launches the kernel with AMS_HOME. Give that instance its own Electron identity and
-// userData before any profile or window work; the desktop package otherwise derives both from
-// the upstream product name and would collide with an installed DSH.
-const amsHome = process.env.AMS_HOME
-const amsKernelMode = amsHome !== undefined && amsHome.length > 0
-if (amsKernelMode) {
-  app.setName('AMS Kernel')
-  app.setPath('userData', join(amsHome, 'kernel', 'electron-data'))
-}
+// AMS Kernel derives every writable path from its own executable location:
+// <install>\data\kernel\AMS Kernel.exe => <install>\data. No environment variable is required,
+// and no upstream DSH userData directory can be selected.
+const amsKernelMode = true
+const amsDataRoot = join(dirname(process.execPath), '..')
+app.setName('AMS Kernel')
+app.setPath('userData', join(amsDataRoot, 'kernel', 'electron-data'))
 
 // Platform-conventional logs directory (macOS ~/Library/Logs/<name>, otherwise under userData);
 // set before ready so the first fatal report already resolves under it.
