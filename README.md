@@ -1,5 +1,11 @@
 # DeepSeek Harness
 
+> **AMS Studio 子项目 · AMS Kernel（DSH fork）**  
+> 本仓库是 AMS Studio 使用的 DeepSeek Harness 内核 fork：保留 DSH 的 agent/session/plugin 架构，改名为 AMS Kernel，数据从安装目录内的 `data` 派生，并提供无登录/无引导的直接工作区体验。  
+> 面向用户的音乐功能由 `ams-plugins` 注入，本地任务服务在 `ams-services`。  
+> 总仓库：https://github.com/yan-mc/AMS-Studio
+
+
 English | [中文](README.zh.md)
 
 DeepSeek Harness (`dsh`) is an open-source agent harness developed by [DeepSeek AI](https://deepseek.com).
