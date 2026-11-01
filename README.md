@@ -1,83 +1,50 @@
-# DeepSeek Harness
+![嘉音Studio cover](assets/cover.png)
 
-> **AMS Studio 子项目 · AMS Kernel（DSH fork）**  
-> 本仓库是 AMS Studio 使用的 DeepSeek Harness 内核 fork：保留 DSH 的 agent/session/plugin 架构，改名为 AMS Kernel，数据从安装目录内的 `data` 派生，并提供无登录/无引导的直接工作区体验。  
-> 面向用户的音乐功能由 `ams-plugins` 注入，本地任务服务在 `ams-services`。  
-> 总仓库：https://github.com/yan-mc/AMS-Studio
+# 嘉音Studio Kernel（ams-harness）
 
+> 本地 AI 工作区内核 · 对话、任务、工具体系与插件运行时
 
-English | [中文](README.zh.md)
+![Windows](https://img.shields.io/badge/Windows-10%2F11-0078D4?logo=windows&logoColor=white)
+![Local First](https://img.shields.io/badge/local--first-data%20stays%20local-2ea44f)
+![Version](https://img.shields.io/badge/version-v2.0.1-eb3c40)
 
-DeepSeek Harness (`dsh`) is an open-source agent harness developed by [DeepSeek AI](https://deepseek.com).
+## 简介
 
-It is built on an **everything-is-a-plugin** architecture and powered by [Cordis](https://github.com/cordiverse/cordis), whose design is described in [_A Programming Paradigm for Spatiotemporal Composability_](https://arxiv.org/abs/2608.25512).
+嘉音Studio Kernel 基于 **DeepSeek Harness（DSH）** 的 MIT 代码构建，提供完全本地的 AI 工作区：
+不需要登录，会话工作目录固定到安装目录 `data/`，通过 Cordis 插件加载音乐工作台与音乐 Agent。
 
-Documentation: [https://deepseek-harness.github.io/deepseek-harness/](https://deepseek-harness.github.io/deepseek-harness/)
+上游：<https://github.com/deepseek-ai/deepseek-harness>（MIT）。本仓库保留上游历史，并在其上维护嘉音Studio的品牌、构建与插件适配。
 
-## Developer preview
+## 核心能力
 
-DeepSeek Harness is in _developer preview_ and iterating rapidly. **THERE WILL BE COMPATIBILITY-BREAKING CHANGES.**
+- 本地 Kernel 进程 + Web GUI，工作目录在 `data/`，不写 C 盘用户数据。
+- Cordis Host/Client 插件体系，支持音乐工作台、Agent 工具、Skill、壁纸与“音乐制作”模式。
+- Gateway / 工具调用 / 本地 ASR 的桥接由配套仓库提供。
+- 发布内核组件：`kernel.ams.dsh 0.2.1-rc.3`（以 ams-release feed 为准）。
 
-Review the [safety notice](SAFETY.md) before running the project.
+## 本仓库
 
-## Run
+当前仓库是 DSH 上游 monorepo 的 fork；嘉音Studio 自有改动集中在 `branding/`、插件适配、构建与发布配置。
+源码体积较大，`node_modules/`、`apps/desktop/.desktop-build/` 属于本地构建缓存，不在版本控制中。
 
-### Run from `npm`
+## 快速开始
 
-Install `Node.js`, then run:
-
-```sh
-npx @deepseek-ai/dsh web
-```
-
-The command starts the Web UI at `http://127.0.0.1:3080` by default and opens it in the default browser for a local launch. An SSH launch only prints the host URL because the SSH client or editor owns the local forwarded address. Pass `--no-open` to run the server without opening a browser. See [Web UI guide](docs/user/guide/index.md).
-
-### Run from source
-
-To run from a repository checkout:
-
-```sh
-git clone https://github.com/deepseek-ai/deepseek-harness.git
-cd deepseek-harness
+```powershell
+# 需要 Node.js + pnpm；依赖安装后
 pnpm install
-pnpm run build
-pnpm dsh web
+pnpm -C apps/desktop build
+# 或由 ams-launcher 自动安装/启动 Kernel
 ```
 
-`pnpm run build` prepares the repository artifacts. `pnpm dsh web` uses those built artifacts without rebuilding.
+## 相关链接
 
-## Community and support
+- 总仓库：[yan-mc/AMS-Studio](https://github.com/yan-mc/AMS-Studio)
+- 最新发布：[yan-mc/ams-release releases](https://github.com/yan-mc/ams-release/releases)
+- 当前版本：**嘉音Studio v2.0.1**（feed 2058）
+- 文档：[ams-docs](https://github.com/yan-mc/ams-docs)
 
-- Submit feedback or bug reports through [GitHub Discussions](https://github.com/deepseek-ai/deepseek-harness/discussions).
-- Add the [`dsh-plugin`](https://github.com/topics/dsh-plugin) topic to your plugin repository for discoverability.
-- Join <a href="https://discord.gg/4MrtZUhpxg">DeepSeek Harness Discord community</a>.
+## 说明
 
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## Development
-
-Start with the [development guide](docs/development.md) and [architecture documentation](docs/architecture.md).
-
-`pnpm run dev:web` builds, serves, and rebuilds client bundles on source edits in one terminal, and `make help` lists the matching Make targets for Web and Desktop; the guide's application commands section owns the full table.
-
-For agents, follow [AGENTS.md](AGENTS.md).
-
-## Citation
-
-```bibtex
-@misc{deepseek-harness2026,
-  title={DeepSeek Harness: Everything is a Plugin},
-  author={DeepSeek-AI},
-  year={2026},
-  publisher={GitHub},
-  howpublished={\url{https://github.com/deepseek-ai/deepseek-harness}},
-}
-```
-
-## License
-
-[MIT](LICENSE)
-
-Third-party dependencies and their licenses are disclosed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+- 所有音乐数据默认留在安装目录 `data/`；Gateway 只监听 `127.0.0.1`。
+- 本项目为本地优先工具，不提供云端上传；使用第三方模型/音频时请遵守各自许可。
+- License: 上游 DSH 代码：MIT。嘉音Studio 自有改动与品牌资源归项目所有；第三方依赖遵循各自许可证。
